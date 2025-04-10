@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traffic Light Control</title>
+</head>
+<body>
+  <h2>CHOOSE THE TRAFFIC LIGHT</h2>
+
+  <form>
+    <input type="radio" id="red" name="light_colour" value="red" onchange="setLight(this.value)">
+    <label for="red">RED</label><br>
+
+    <input type="radio" id="yellow" name="light_colour" value="yellow" onchange="setLight(this.value)">
+    <label for="yellow">YELLOW</label><br>
+
+    <input type="radio" id="green" name="light_colour" value="green" onchange="setLight(this.value)">
+    <label for="green">GREEN</label><br>
+  </form>
+
+  <script>
+    function setLight(color) {
+      const baseURL = "https://traffic-lights-eaab9-default-rtdb.firebaseio.com/leds/";
+
+      // Turn all lights off first
+      const colors = ['red', 'yellow', 'green'];
+      colors.forEach(c => {
+        fetch(`${baseURL}${c}.json`, {
+          method: "PUT",
+          body: JSON.stringify(c === color),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }).then(response => response.json())
+          .then(data => console.log(`${c} => ${c === color}`));
+      });
+    }
+  </script>
+</body>
+</html>
